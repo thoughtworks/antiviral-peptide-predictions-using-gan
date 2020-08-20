@@ -148,8 +148,8 @@ class GAN():
 
         model = Sequential()
         model.add(LSTM(512, input_shape=self.seq_shape, return_sequences=True))
-        model.add(Bidirectional(LSTM(512)))
-        model.add(LSTM(256, return_sequences=True))
+        model.add(Bidirectional(LSTM(512, return_sequences=True)))
+        model.add(Bidirectional(LSTM(256, return_sequences=True)))
         model.add(Dense(256))
         model.add(LeakyReLU(alpha=0.2))
         model.add(Dense(1, activation='sigmoid'))
