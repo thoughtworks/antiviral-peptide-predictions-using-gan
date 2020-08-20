@@ -260,3 +260,19 @@ class GAN():
 if __name__ == '__main__':
   gan = GAN(rows=100)    
   gan.train(epochs=5000, batch_size=32, sample_interval=1)
+
+
+"""
+Get following error only when running these scripts on system with GPU.
+
+Till early versions of keras, keras had seperate layer with CUDA implementation namely, CuDNNRNN, CuDNNLSTM and CuDNNGRU.
+Now there are only RNN, LSTM and GRU layers and if GPU is being used then automatically CUDA implementations of these layers are used.
+This error is because CuDNNRNN is not found as I was trying to run them on GPU.
+
+UnknownError:    Fail to find the dnn implementation.
+	 [[{{node CudnnRNN}}]]
+	 [[sequential/lstm/PartitionedCall]] [Op:__inference_train_function_13130]
+
+Function call stack:
+train_function -> train_function -> train_function
+"""
