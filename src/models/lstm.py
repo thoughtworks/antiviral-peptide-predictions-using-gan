@@ -44,7 +44,7 @@ def train_network():
     
 def get_alphabet_list():
     """ Get all the amino acids from the data files """
-    data = pd.read_csv("data/raw/positive_data_unfiltered2807.csv")
+    data = pd.read_csv("data/raw/amp_tw_curated.csv")
     data.drop(['Unnamed: 0'], axis=1, inplace=True)
     data = additional_filtering_of_sequences(data)
     seq = data['Sequence'].dropna()
