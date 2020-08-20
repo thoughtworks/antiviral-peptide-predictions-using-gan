@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 import glob
+import pandas as pd
 
-from music21 import converter, instrument, note, chord, stream
+from src.models.utils import *
+
 from keras.layers import Input, Dense, Reshape, Dropout, LSTM, Bidirectional
 from keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from keras.layers.advanced_activations import LeakyReLU
@@ -56,8 +58,8 @@ def prepare_sequences(alphabet_list, n_alphabets):
     return (network_input, network_output)
 
 def generate_peptide(model, alphabet_list, latent_dim, n_alphabets):
+    
     # Get pitch names and store in a dictionary
-    notes = input_notes
     alphabets = sorted(set(alphabet_list))
     int_to_note = dict(zip(range(len(alphabets)), alphabets))
         

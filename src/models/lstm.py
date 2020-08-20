@@ -2,7 +2,7 @@ import glob
 import numpy as np
 import pandas as pd
 
-from utils import *
+from src.models.utils import *
 
 from keras.models import Sequential
 from keras.models import load_model
