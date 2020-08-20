@@ -17,7 +17,14 @@ from keras.optimizers import Adam
 from keras.utils import np_utils
 
 def get_alphabet_list():
-    """ Get all the amino acids from the data files """
+    """
+    Get all the amino acids from the data files and returns a single flattened out list of amino acids
+    
+    example:
+    Input: ['A', 'C', 'A','G'], ['G', 'A', 'T','D']
+    Output: ['A', 'C', 'A','G', 'G', 'A', 'T','D']
+
+    """
     data = pd.read_csv("data/raw/positive_data_unfiltered2807.csv")
     data.drop(['Unnamed: 0'], axis=1, inplace=True)
     data = additional_filtering_of_sequences(data)
@@ -27,7 +34,32 @@ def get_alphabet_list():
     return aa_list
 
 def prepare_sequences(alphabet_list, n_alphabets):
-    """ Prepare the sequences used by the Neural Network """
+    """
+    Prepare the sequences used by the Neural Network.
+    Takes in the alphabet_list and breaks it into two lists.
+    First is a list of subsequences with rolling window of sequence_length and maps it to a numeric value.
+    Second is list of alphabet whic follows each subsequence from 1st list.
+    This are X and y where X is input sequence and y is next letter given X.
+    (This does breaks the structure of a peptide sequence which is provided by its original length.
+    Another method that could have been used was to take only those sequence which have same length.
+    Still working on how to accomodate varying length to pass original sequence as it is.)
+    
+    example:
+    Input:
+    -----
+    alphabet_list = ['A', 'C', 'A','G', 'G', 'A', 'T','D']
+    sequence_length = 4
+    mapping = {'A': 0, 'C': 1, 'G': 2, 'T': 3,'D': 4}
+    
+    Output:
+    ------
+    mapped alphabet list = [0, 1, 0, 2, 2, 0, 3, 4]
+    X = [[0, 1, 0, 2], [1, 0, 2, 2], [0, 2, 2, 0], [2, 2, 0, 3], [2, 0, 3, 4]
+    y = [2, 0, 3, 4]
+
+    this is noramalised to be b/w -1 and 1
+
+    """
     sequence_length = 100
 
     # get all alphabet names
@@ -58,9 +90,16 @@ def prepare_sequences(alphabet_list, n_alphabets):
     return (network_input, network_output)
 
 def generate_peptide(model, alphabet_list, latent_dim, n_alphabets):
+    """
+    Generate peptide from the neural network based on a sequence of amino acids.
+    Based on random noise generate a sequence of defined sequence length.
+    Convert this numeric sequence to sequence of amino acids using inverse mapping.
+    """
     
-    # Get pitch names and store in a dictionary
+    # Get alphabet names to store in a dictionary
     alphabets = sorted(set(alphabet_list))
+
+    #create inverse mapping from int to alphabet
     int_to_note = dict(zip(range(len(alphabets)), alphabets))
         
     # Use random noise to generate sequences
@@ -90,7 +129,7 @@ class GAN():
         # Build the generator
         self.generator = self.build_generator()
 
-        # The generator takes noise as input and generates note sequences
+        # The generator takes noise as input and generates peptide sequences
         z = Input(shape=(self.latent_dim,))
         generated_seq = self.generator(z)
 
@@ -110,8 +149,7 @@ class GAN():
         model = Sequential()
         model.add(LSTM(512, input_shape=self.seq_shape, return_sequences=True))
         model.add(Bidirectional(LSTM(512)))
-        model.add(Dense(512))
-        model.add(LeakyReLU(alpha=0.2))
+        model.add(LSTM(256, return_sequences=True))
         model.add(Dense(256))
         model.add(LeakyReLU(alpha=0.2))
         model.add(Dense(1, activation='sigmoid'))
@@ -148,7 +186,7 @@ class GAN():
         # Load and convert the data
         alphabet_list = get_alphabet_list()
         n_alphabets = len(set(alphabet_list))
-        X_train, y_train = prepare_sequences(alphabet_list, n_alphabets)
+        X_train, _ = prepare_sequences(alphabet_list, n_alphabets)
 
         # Adversarial ground truths
         real = np.ones((batch_size, 1))
@@ -192,8 +230,9 @@ class GAN():
         self.plot_loss()
         
     def generate(self, alphabet_list):
-        # Get pitch names and store in a dictionary
-        notes = input_notes
+        """ Same as generate_peptide function """
+        
+        # Get alphabet names to store in a dictionary
         alphabets = sorted(set(alphabet_list))
         n_alphabets = len(set(alphabet_list))
         int_to_note = dict(zip(range(len(alphabets)), alphabets))
