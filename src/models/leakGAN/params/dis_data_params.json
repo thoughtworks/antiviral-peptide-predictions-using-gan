@@ -1,0 +1,8 @@
+{
+	"positive_filepath":"./data/corpus_AMP.npy",
+	"negative_filepath":"./data/corpus_nonAMP.npy",
+    "batch_size":10,
+    "shuffle":true,
+    "num_workers":4,
+    "pin_memory":false
+}

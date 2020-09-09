@@ -16,6 +16,13 @@ from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from keras.utils import np_utils
 
+# ----- To avoid this error: OMP: Error #15: Initializing libiomp5.dylib, but found libiomp5.dylib already initialized.
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
+# conda install nomkl -> This may be another solution
+# ------
+
 def get_alphabet_list():
     """
     Get all the amino acids from the data files and returns a single flattened out list of amino acids
