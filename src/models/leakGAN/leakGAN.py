@@ -193,9 +193,7 @@ def pretrain_generator(model_dict, optimizer_dict, scheduler_dict, dataloader, v
 
     for i, sample in enumerate(dataloader):  ##done changes in the loss
         # print("DataLoader: {}".format(dataloader))
-        m_lr_scheduler.step()
-        w_lr_scheduler.step()
-
+        
         sample = Variable(sample)
         if use_cuda:
             sample = sample.cuda(non_blocking=True)
@@ -223,6 +221,8 @@ def pretrain_generator(model_dict, optimizer_dict, scheduler_dict, dataloader, v
             if i == 9:  ##why 63  guessing the batch size was 64 so changin it to 9
                 print("Pre-Manager Loss: {:.5f}, Pre-Worker Loss: {:.5f},samples: {:.5f}\n".format(m_loss, w_loss,
                                                                                                    sample))
+            m_lr_scheduler.step()
+            w_lr_scheduler.step()
     """
     Update model_dict, optimizer_dict, and scheduler_dict
     """
