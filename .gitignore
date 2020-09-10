@@ -1,5 +1,8 @@
 test/
 proteinGAN/
+src/models/leakGAN/data/corpus_nonAMP.npy
+src/models/leakGAN/last_generated_sample.npy
+src/models/leakGAN/last_generated_sample.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
