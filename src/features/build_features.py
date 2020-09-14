@@ -1,5 +1,4 @@
 import pandas as pd
-# import altair as alt
 import matplotlib.pyplot as plt
 import seaborn as sns
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
@@ -41,84 +40,40 @@ def create_sequence_properties_dataframe(sequences):
         seq_properties = seq_properties.append(row)
     return seq_properties
 
-sequences = pd.read_csv('../data/raw/avp_sequences.csv')
+sequences = pd.read_csv('../data/raw/AVP_data.csv')
 avp_seq_properties = create_sequence_properties_dataframe(sequences)
+avp_seq_properties['activity'] = 'AVP'
+non_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/raw/non_AVP_data.csv'))
+non_avp_seq_properties['activity'] = 'non-AVP'
+
+all_data = avp_seq_properties.append(non_avp_seq_properties, ignore_index = True)
+
 
 # ---- Visualizations on seq properties ----
 
+def create_distributions(amp_data, non_amp_data, properties):
+    kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=200)
+    for property in properties:
+        print(property)
+        plt.figure(figsize=(10, 7), dpi=80)
+        sns.distplot(amp_data[property], color="g", label="Real_AMP", **kwargs)
+        sns.distplot(non_amp_data[property], color="y", label="non-AMP", **kwargs)
+        plt.legend()
+        plt.title(property)
+        plt.savefig("../reports/figures/distribution_"+property+".png")
+        plt.show()
 
-kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=200)
 
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.molecular_weight, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("molecular_weight")
-plt.savefig("../reports/figures/molecular_weight.png")
-plt.show()
+def create_box_plots(data, properties):
+    for property in properties:
+        print(property)
+        plt.figure(figsize=(10, 7), dpi=80)
+        ax = sns.boxenplot(x="activity", y=property, hue="activity", data=data, palette="Set3")
+        plt.legend()
+        plt.title(property)
+        # plt.savefig("../reports/figures/box_plot_"+property+".png")
+        plt.show()
 
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.aromaticity, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("aromaticity")
-plt.savefig("../reports/figures/aromaticity.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.instability_index, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("instability_index")
-plt.savefig("../reports/figures/instability_index.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.isoelectric_point, color="g", label="Real", **kwargs)
-# sns.distplot(avp_seq_properties.isoelectric_point, color="r", label="Generated", **kwargs)
-plt.legend()
-# plt.xlim(-0.25,0.75)
-plt.title("isoelectric_point")
-plt.savefig("../reports/figures/isoelectric_point.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.helix, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("secondary structure helix")
-plt.savefig("../reports/figures/helix.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.turn, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("secondary structure turn")
-plt.savefig("../reports/figures/turn.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.sheet, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("secondary structure sheet")
-plt.savefig("../reports/figures/sheet.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.with_reduced_cysteines, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("molar_extinction_coefficient  with_reduced_cysteines")
-plt.savefig("../reports/figures/with_reduced_cysteines.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.with_disulfid_bridges, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("molar_extinction_coefficient  with_disulfid_bridges")
-plt.savefig("../reports/figures/with_disulfid_bridges.png")
-plt.show()
-
-plt.figure(figsize=(10, 7), dpi=80)
-sns.distplot(avp_seq_properties.gravy, color="g", label="Real", **kwargs)
-plt.legend()
-plt.title("gravy  ")
-plt.savefig("../reports/figures/gravy.png")
-plt.show()
-
-# Create box plot comparison
+properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy']
+create_distributions(avp_seq_properties, non_avp_seq_properties, properties_to_plot)
+create_box_plots(all_data, properties_to_plot)
