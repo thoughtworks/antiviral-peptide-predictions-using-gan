@@ -1,3 +1,5 @@
+import pandas as pd
+
 def get_positive_amp_data(path):
     return pd.read_csv(path, sep=",", header=0).reset_index().drop('index', axis=1)[['Sequence', 'Activity']]
 
