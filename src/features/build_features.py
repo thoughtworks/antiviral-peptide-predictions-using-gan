@@ -76,7 +76,7 @@ def create_iqr_hist(positive_data, negative_data, generated_data, properties, sa
         plt.figure(figsize=(10, 7), dpi=80)
         sns.distplot(positive_data[property], hist=True, color="g", label="Real_AMP", **kwargs)
         sns.distplot(negative_data[property], hist=True, color="y", label="non-AMP", **kwargs)
-        sns.distplot(generated_data[property], hist=True, color="m", label="non-AMP", **kwargs)
+        sns.distplot(generated_data[property], hist=True, color="m", label="generated-AMP", **kwargs)
 
         Q1_amp = np.percentile(positive_data[property], 25, interpolation='midpoint')
         Q3_amp = np.percentile(positive_data[property], 75, interpolation='midpoint')
