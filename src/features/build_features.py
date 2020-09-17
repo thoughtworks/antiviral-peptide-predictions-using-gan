@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import numpy as np
-
+from collections import Counter
 import os
 
 
@@ -119,34 +119,40 @@ def create_properties_and_plots(avp_data_path, non_avp_data_path, generated_avp_
     create_box_plots(all_data, properties_for_box_plot, save_plots)
     create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
 
-def dipeptide_encoding(seq, n):
-    """
-    Returns n-Gram Motif frequency
-    https://www.biorxiv.org/content/10.1101/170407v1.full.pdf
-    """
-    aa_list = list(seq)
-    return {''.join(aa_list): n for aa_list, n in Counter(zip(*[aa_list[i:] for i in range(n)])).items() if
-            not aa_list[0][-1] == (',')}
-    
-def create_aa_propensity_boxplot(fname, save=False):
-    data = pd.read_csv(fname)
-    to_drop = [i for i, s in enumerate(data.Sequence) if ' ' in s]
-    data = data.drop(to_drop, axis=0)
-    seq_vec = data.Sequence.apply(lambda x: dipeptide_encoding(x, 1)).to_list()
-    df = pd.DataFrame(seq_vec)
-    df = df.fillna(0)
-    df = df.sort_index(axis=1)
-    df_fraction = df.div(df.sum(axis=1), axis=0)
-
-    sns.boxplot(data=df_fraction*100)
+def create_aa_propensity_boxplot(avp_data_path, non_avp_data_path, generated_avp_data_path, save=False):
+    print("amino_acid_propensity_avp")
+    df = pd.DataFrame(avp_seq_properties["aa_percentages"].to_list())
+    plt.figure(figsize=(10, 7), dpi=80)
+    sns.boxplot(data=df*100)
     plt.ylabel("Amino Acid %")
-    plt.title("Amino acid propensity")
+    plt.title("Amino acid propensity - AVP")
     if save:
-            plt.savefig("../reports/figures/animo_acid_propensity.png")
+            plt.savefig("../reports/figures/animo_acid_propensity_avp.png")
     plt.show()
 
+    print("amino_acid_propensity_non_avp")
+    df = pd.DataFrame(non_avp_data_path["aa_percentages"].to_list())
+    plt.figure(figsize=(10, 7), dpi=80)
+    sns.boxplot(data=df*100)
+    plt.ylabel("Amino Acid %")
+    plt.title("Amino acid propensity - Non-AVP")
+    if save:
+            plt.savefig("../reports/figures/animo_acid_propensity_non_avp.png")
+    plt.show()
+
+    print("amino_acid_propensity_avp_generated")
+    df = pd.DataFrame(generated_avp_data_path["aa_percentages"].to_list())
+    plt.figure(figsize=(10, 7), dpi=80)
+    sns.boxplot(data=df*100)
+    plt.ylabel("Amino Acid %")
+    plt.title("Amino acid propensity - Generated")
+    if save:
+            plt.savefig("../reports/figures/animo_acid_propensity_generated.png")
+    plt.show()
+    
+
 if __name__ == '__main__':
-    os.chdir("/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src")
+    os.chdir('/Users/in-divye.singh/Documents/Projects/PeptideGAN/antiviral-peptide-predictions-using-gan/src')
 
     save_plots = True
 
@@ -169,4 +175,4 @@ if __name__ == '__main__':
     properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
     create_box_plots(all_data, properties_for_box_plot, save_plots)
     create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
-    create_aa_propensity_boxplot('../data/generated/generated_AVP_data.csv', save_plots)
+    create_aa_propensity_boxplot(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, save_plots)
