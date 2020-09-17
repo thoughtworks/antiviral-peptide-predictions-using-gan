@@ -113,6 +113,8 @@ def create_properties_and_plots(avp_data_path, non_avp_data_path, generated_avp_
     all_data = all_data_temp.append(generated_avp_seq_properties, ignore_index=True)
     del all_data_temp
 
+    all_data.to_csv('../data/processed/sequence_properties_data.csv')
+
     properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn','sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy']
     create_distributions(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
     properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy']
@@ -148,7 +150,7 @@ def create_aa_propensity_boxplot(fname, save=False):
 if __name__ == '__main__':
     os.chdir("/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src")
 
-    save_plots = True
+    save_plots = False
 
     avp_sequences = pd.read_csv('../data/raw/AVP_data.csv')
     avp_seq_properties = create_sequence_properties_dataframe(avp_sequences)
@@ -156,13 +158,13 @@ if __name__ == '__main__':
     non_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/raw/non_AVP_data.csv'))
     non_avp_seq_properties['activity'] = 'non-AVP'
 
-    generated_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/generated/generated_AVP_data.csv'))
+    generated_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/generated/generated_from_avp_pred_120epoch.csv'))
     generated_avp_seq_properties['activity'] = 'generated-AVP'
 
     all_data_temp = avp_seq_properties.append(non_avp_seq_properties, ignore_index=True)
     all_data = all_data_temp.append(generated_avp_seq_properties, ignore_index=True)
     del all_data_temp
-
+    all_data.to_csv('../data/processed/sequence_properties_data.csv')
 
     properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy', 'net_charge_at_pH7point4']
     create_distributions(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
