@@ -169,3 +169,4 @@ if __name__ == '__main__':
     properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
     create_box_plots(all_data, properties_for_box_plot, save_plots)
     create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
+    create_aa_propensity_boxplot('../data/generated/generated_AVP_data.csv', save_plots)
