@@ -212,4 +212,12 @@ if __name__ == '__main__':
         create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
         create_aa_propensity_boxplot(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, save_plots)
     else:
+        """
+        
+        !! Can give absolute paths as follows: !!
+        
         create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
+        """
+        # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
+        # You can change your current working directory by: os.chdir('<your directory here>')
+        create_properties_and_plots()
