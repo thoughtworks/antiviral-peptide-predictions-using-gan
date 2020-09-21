@@ -164,7 +164,8 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
 
     """
     dt = datetime.now().__str__()
-    saving_dir = os.mkdir(directory_to_save_properties_file_and_plots + dt)
+    saving_dir = directory_to_save_properties_file_and_plots + dt
+    os.mkdir(saving_dir)
 
     metadata = pd.read_csv(csv_file_with_location_and_activity)
     activities = metadata.shape[0]
