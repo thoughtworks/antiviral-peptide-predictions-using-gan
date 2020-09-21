@@ -5,10 +5,11 @@ from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import numpy as np
 from collections import Counter
 import os
+from datetime import datetime
 
 
 def create_sequence_properties_dataframe(sequences):
-    params = ['seq', 'aa_counts', 'aa_percentages', 'molecular_weight', 'aromaticity', 'instability_index',
+    params = ['sequence', 'aa_counts', 'aa_percentages', 'molecular_weight', 'aromaticity', 'instability_index',
               'isoelectric_point', 'sec_struc', 'helix', 'turn', 'sheet', 'epsilon_prot', 'with_reduced_cysteines',
               'with_disulfid_bridges', 'gravy', 'flexibility','net_charge_at_pH7point4']
 
@@ -151,7 +152,38 @@ def create_aa_propensity_boxplot(avp_data_path, non_avp_data_path, generated_avp
     if save:
             plt.savefig("../reports/figures/animo_acid_propensity_generated.png")
     plt.show()
-    
+
+
+def create_properties_and_plots(csv_file_with_location_and_activity, directory_to_save_properties_file_and_plots):
+    """
+    assuming the paths are from the root folder: antiviral_peptide_prediction
+    headers: path, activity
+    you can give absolute paths
+    All data should have a column with header Sequence. Does not matter if they have other columns too.
+
+    """
+    csv_file_with_location_and_activity = '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv'
+    dt = datetime.now().__str__()
+    directory_to_save_properties_file_and_plots = '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/'+dt
+    os.mkdir(directory_to_save_properties_file_and_plots)
+
+    metadata = pd.read_csv(csv_file_with_location_and_activity)
+    activities = metadata.shape[0]
+    all_data = pd.DataFrame()
+    for row in range(activities):
+        path = metadata.iloc[row].path
+        activity = metadata.iloc[row].activity
+
+        sequences = pd.read_csv(path)
+        seq_properties = create_sequence_properties_dataframe(sequences)
+        seq_properties['activity'] = activity
+        all_data = all_data.append(seq_properties, ignore_index=True)
+
+    all_data.to_csv(directory_to_save_properties_file_and_plots + '/properties.csv')
+
+    return
+
+
 
 if __name__ == '__main__':
     os.chdir('/Users/in-divye.singh/Documents/Projects/PeptideGAN/antiviral-peptide-predictions-using-gan/src')
