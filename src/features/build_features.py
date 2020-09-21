@@ -93,7 +93,7 @@ def create_iqr_hist(positive_data, negative_data, generated_data, properties, sa
             plt.savefig("../reports/figures/iqr_hist_" + property + ".png")
         plt.show()
 
-def create_properties_and_plots(avp_data_path, non_avp_data_path, generated_avp_data_path, save_plots=False):
+def create_properties_and_plots_old(avp_data_path, non_avp_data_path, generated_avp_data_path, save_plots=False):
     """
     params:
     All data must have sequences under the header 'Sequence'
@@ -154,18 +154,17 @@ def create_aa_propensity_boxplot(avp_data_path, non_avp_data_path, generated_avp
     plt.show()
 
 
-def create_properties_and_plots(csv_file_with_location_and_activity, directory_to_save_properties_file_and_plots):
+def create_properties_and_plots(csv_file_with_location_and_activity='src/features/metadata.csv', directory_to_save_properties_file_and_plots='reports/'):
     """
-    assuming the paths are from the root folder: antiviral_peptide_prediction
+    By default paths are from the root folder: antiviral_peptide_prediction
     headers: path, activity
     you can give absolute paths
     All data should have a column with header Sequence. Does not matter if they have other columns too.
+    saving all plots by default
 
     """
-    csv_file_with_location_and_activity = '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv'
     dt = datetime.now().__str__()
-    directory_to_save_properties_file_and_plots = '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/'+dt
-    os.mkdir(directory_to_save_properties_file_and_plots)
+    saving_dir = os.mkdir(directory_to_save_properties_file_and_plots + dt)
 
     metadata = pd.read_csv(csv_file_with_location_and_activity)
     activities = metadata.shape[0]
@@ -179,34 +178,38 @@ def create_properties_and_plots(csv_file_with_location_and_activity, directory_t
         seq_properties['activity'] = activity
         all_data = all_data.append(seq_properties, ignore_index=True)
 
-    all_data.to_csv(directory_to_save_properties_file_and_plots + '/properties.csv')
+    all_data.to_csv(saving_dir + '/properties.csv')
 
     return
 
 
 
 if __name__ == '__main__':
-    os.chdir('/Users/in-divye.singh/Documents/Projects/PeptideGAN/antiviral-peptide-predictions-using-gan/src')
+    old = False
+    if old:
+        os.chdir('/Users/in-divye.singh/Documents/Projects/PeptideGAN/antiviral-peptide-predictions-using-gan/src')
 
-    save_plots = False
+        save_plots = False
 
-    avp_sequences = pd.read_csv('../data/raw/AVP_data.csv')
-    avp_seq_properties = create_sequence_properties_dataframe(avp_sequences)
-    avp_seq_properties['activity'] = 'AVP'
-    non_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/raw/non_AVP_data.csv'))
-    non_avp_seq_properties['activity'] = 'non-AVP'
+        avp_sequences = pd.read_csv('../data/raw/AVP_data.csv')
+        avp_seq_properties = create_sequence_properties_dataframe(avp_sequences)
+        avp_seq_properties['activity'] = 'AVP'
+        non_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/raw/non_AVP_data.csv'))
+        non_avp_seq_properties['activity'] = 'non-AVP'
 
-    generated_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/generated/generated_from_avp_pred_120epoch.csv'))
-    generated_avp_seq_properties['activity'] = 'generated-AVP'
+        generated_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/generated/generated_from_avp_pred_120epoch.csv'))
+        generated_avp_seq_properties['activity'] = 'generated-AVP'
 
-    all_data_temp = avp_seq_properties.append(non_avp_seq_properties, ignore_index=True)
-    all_data = all_data_temp.append(generated_avp_seq_properties, ignore_index=True)
-    del all_data_temp
-    all_data.to_csv('../data/processed/sequence_properties_data.csv')
+        all_data_temp = avp_seq_properties.append(non_avp_seq_properties, ignore_index=True)
+        all_data = all_data_temp.append(generated_avp_seq_properties, ignore_index=True)
+        del all_data_temp
+        all_data.to_csv('../data/processed/sequence_properties_data.csv')
 
-    properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy', 'net_charge_at_pH7point4']
-    create_distributions(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
-    properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
-    create_box_plots(all_data, properties_for_box_plot, save_plots)
-    create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
-    create_aa_propensity_boxplot(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, save_plots)
+        properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy', 'net_charge_at_pH7point4']
+        create_distributions(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
+        properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
+        create_box_plots(all_data, properties_for_box_plot, save_plots)
+        create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
+        create_aa_propensity_boxplot(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, save_plots)
+    else:
+        create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
