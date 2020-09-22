@@ -43,18 +43,17 @@ def create_sequence_properties_dataframe(sequences):
 
 # ---- Visualizations on seq properties ----
 
-def create_distributions(amp_data, non_amp_data, generated_avp_data, properties, save=False):
-    kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=200)
+def create_distributions(data, properties, save=False, saving_dir="../reports/figures/distribution_" ):
+    kwargs = dict(hist_kws={'alpha': .7}, kde_kws={'linewidth': 4}, bins=200)
+    print("---- Plotting distribution ----")
     for property in properties:
         print(property)
         plt.figure(figsize=(10, 7), dpi=80)
-        sns.distplot(amp_data[property], color="g", label="Real_AVP", **kwargs)
-        sns.distplot(non_amp_data[property], color="y", label="non-AVP", **kwargs)
-        sns.distplot(generated_avp_data[property], color="m", label="generated-AVP", **kwargs)
+        sns.displot(data, x=property, hue="activity")
         plt.legend()
         plt.title(property)
         if save:
-            plt.savefig("../reports/figures/distribution_"+property+".png")
+            plt.savefig(saving_dir + '/distribution_' + property + ".png")
         plt.show()
 
 
@@ -62,15 +61,15 @@ def create_box_plots(data, properties, save=False, saving_dir = "../reports/figu
     for property in properties:
         print(property)
         plt.figure(figsize=(10, 7), dpi=80)
-        ax = sns.boxenplot(x="activity", y=property, hue="activity", data=data, palette="Set3")
+        ax = sns.boxenplot(x="activity", y=property, hue="activity", data=data)
         plt.legend()
         plt.title(property)
         if save:
-            plt.savefig(saving_dir + '/' + property + ".png")
+            plt.savefig(saving_dir + '/box_plot_' + property + ".png")
         plt.show()
 
 
-def create_iqr_hist(positive_data, negative_data, generated_data, properties, save=False, saving_dir="../reports/figures/iqr_hist_"):
+def create_iqr_hist2(positive_data, negative_data, generated_data, properties, save=False, saving_dir="../reports/figures/iqr_hist_"):
     kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=100)
     for property in properties:
         print(property)
@@ -93,34 +92,30 @@ def create_iqr_hist(positive_data, negative_data, generated_data, properties, sa
             plt.savefig(saving_dir + '/' + property + ".png")
         plt.show()
 
-def create_properties_and_plots_old(avp_data_path, non_avp_data_path, generated_avp_data_path, save_plots=False):
-    """
-    params:
-    All data must have sequences under the header 'Sequence'
-    """
-    sequences = pd.read_csv(avp_data_path)
-    avp_seq_properties = create_sequence_properties_dataframe(sequences)
-    avp_seq_properties['activity'] = 'AVP'
+def create_iqr_hist(data, properties, save=False, saving_dir="../reports/figures/iqr_hist_"):
+    kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=100)
+    for property in properties:
+        print(property)
+        plt.figure(figsize=(10, 7), dpi=80)
+        sns.displot(data, x=property, hue="activity")
 
-    sequences = pd.read_csv(non_avp_data_path)
-    non_avp_seq_properties = create_sequence_properties_dataframe(sequences)
-    non_avp_seq_properties['activity'] = 'non-AVP'
+    Q1 = 999
+    Q3 = -999
+    for activity in data.activity:
+        subset = data[data["activity"] == activity]
+        Q1_subset = np.percentile(subset[property], 25, interpolation='midpoint')
+        Q3_subset = np.percentile(subset[property], 75, interpolation='midpoint')
+        if Q1_subset < Q1:
+            Q1 = Q1_subset
+        if Q3_subset > Q3:
+            Q3 = Q3_subset
 
-    sequences = pd.read_csv(generated_avp_data_path)
-    generated_avp_seq_properties = create_sequence_properties_dataframe(sequences)
-    generated_avp_seq_properties['activity'] = 'generated-AVP'
-
-    all_data_temp = avp_seq_properties.append(non_avp_seq_properties, ignore_index=True)
-    all_data = all_data_temp.append(generated_avp_seq_properties, ignore_index=True)
-    del all_data_temp
-
-    all_data.to_csv('../data/processed/sequence_properties_data.csv')
-
-    properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn','sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy']
-    create_distributions(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
-    properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy']
-    create_box_plots(all_data, properties_for_box_plot, save_plots)
-    create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
+        plt.xlim([Q1, Q3])
+        plt.legend()
+        plt.title(property)
+        if save:
+            plt.savefig(saving_dir + '/' + property + ".png")
+        plt.show()
 
 def create_aa_propensity_boxplot(avp_data_path, non_avp_data_path, generated_avp_data_path, save=False):
     print("amino_acid_propensity_avp")
@@ -164,6 +159,8 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
 
     """
     save_plots = True
+    properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy', 'net_charge_at_pH7point4']
+    properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
 
     dt = datetime.now().__str__()
     saving_dir = directory_to_save_properties_file_and_plots + dt
@@ -183,8 +180,9 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
 
     all_data.to_csv(saving_dir + '/properties.csv')
 
-    properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
     create_box_plots(all_data, properties_for_box_plot, save_plots, saving_dir)
+
+    create_distributions(all_data, properties_to_plot, save_plots, saving_dir)
 
     return
 
