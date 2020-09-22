@@ -58,7 +58,7 @@ def create_distributions(amp_data, non_amp_data, generated_avp_data, properties,
         plt.show()
 
 
-def create_box_plots(data, properties, save=False):
+def create_box_plots(data, properties, save=False, saving_dir = "../reports/figures/box_plot_"):
     for property in properties:
         print(property)
         plt.figure(figsize=(10, 7), dpi=80)
@@ -66,11 +66,11 @@ def create_box_plots(data, properties, save=False):
         plt.legend()
         plt.title(property)
         if save:
-            plt.savefig("../reports/figures/box_plot_"+property+".png")
+            plt.savefig(saving_dir + '/' + property + ".png")
         plt.show()
 
 
-def create_iqr_hist(positive_data, negative_data, generated_data, properties, save=False):
+def create_iqr_hist(positive_data, negative_data, generated_data, properties, save=False, saving_dir="../reports/figures/iqr_hist_"):
     kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=100)
     for property in properties:
         print(property)
@@ -90,7 +90,7 @@ def create_iqr_hist(positive_data, negative_data, generated_data, properties, sa
         plt.legend()
         plt.title(property)
         if save:
-            plt.savefig("../reports/figures/iqr_hist_" + property + ".png")
+            plt.savefig(saving_dir + '/' + property + ".png")
         plt.show()
 
 def create_properties_and_plots_old(avp_data_path, non_avp_data_path, generated_avp_data_path, save_plots=False):
@@ -163,6 +163,8 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
     saving all plots by default
 
     """
+    save_plots = True
+
     dt = datetime.now().__str__()
     saving_dir = directory_to_save_properties_file_and_plots + dt
     os.mkdir(saving_dir)
@@ -180,6 +182,9 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
         all_data = all_data.append(seq_properties, ignore_index=True)
 
     all_data.to_csv(saving_dir + '/properties.csv')
+
+    properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
+    create_box_plots(all_data, properties_for_box_plot, save_plots, saving_dir)
 
     return
 
@@ -221,4 +226,4 @@ if __name__ == '__main__':
         """
         # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
         # You can change your current working directory by: os.chdir('<your directory here>')
-        create_properties_and_plots()
+        create_properties_and_plots('metadata.csv', '../../reports/')
