@@ -95,6 +95,7 @@ def create_iqr_hist(data, properties, save=False, saving_dir="../reports/figures
             plt.savefig(saving_dir + '/iqr_hist_' + property + ".png")
         plt.show()
 
+
 def create_aa_propensity_boxplot(data, save=False, saving_dir="../reports/figures/aa_propensity_"):
     print("---- Creating amino acid propensity plots ----")
 
