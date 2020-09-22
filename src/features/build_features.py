@@ -95,36 +95,21 @@ def create_iqr_hist(data, properties, save=False, saving_dir="../reports/figures
             plt.savefig(saving_dir + '/iqr_hist_' + property + ".png")
         plt.show()
 
-def create_aa_propensity_boxplot(avp_data_path, non_avp_data_path, generated_avp_data_path, save=False):
-    print("amino_acid_propensity_avp")
-    df = pd.DataFrame(avp_seq_properties["aa_percentages"].to_list())
-    plt.figure(figsize=(10, 7), dpi=80)
-    sns.boxplot(data=df*100)
-    plt.ylabel("Amino Acid %")
-    plt.title("Amino acid propensity - AVP")
-    if save:
-            plt.savefig("../reports/figures/animo_acid_propensity_avp.png")
-    plt.show()
+def create_aa_propensity_boxplot(data, save=False, saving_dir="../reports/figures/aa_propensity_"):
+    print("---- Creating amino acid propensity plots ----")
 
-    print("amino_acid_propensity_non_avp")
-    df = pd.DataFrame(non_avp_data_path["aa_percentages"].to_list())
-    plt.figure(figsize=(10, 7), dpi=80)
-    sns.boxplot(data=df*100)
-    plt.ylabel("Amino Acid %")
-    plt.title("Amino acid propensity - Non-AVP")
-    if save:
-            plt.savefig("../reports/figures/animo_acid_propensity_non_avp.png")
-    plt.show()
+    for activity in data.activity.unique():
+        print(activity)
+        subset = data[data["activity"] == activity]
+        df = pd.DataFrame(subset["aa_percentages"].to_list())
+        plt.figure(figsize=(10, 7), dpi=80)
+        sns.boxplot(data=df * 100)
+        plt.ylabel("Amino Acid %")
+        plt.title("Amino acid propensity - " + activity)
+        if save:
+            plt.savefig(saving_dir + '/animo_acid_propensity_' + activity + ".png")
+        plt.show()
 
-    print("amino_acid_propensity_avp_generated")
-    df = pd.DataFrame(generated_avp_data_path["aa_percentages"].to_list())
-    plt.figure(figsize=(10, 7), dpi=80)
-    sns.boxplot(data=df*100)
-    plt.ylabel("Amino Acid %")
-    plt.title("Amino acid propensity - Generated")
-    if save:
-            plt.savefig("../reports/figures/animo_acid_propensity_generated.png")
-    plt.show()
 
 
 def create_properties_and_plots(csv_file_with_location_and_activity='src/features/metadata.csv', directory_to_save_properties_file_and_plots='reports/'):
@@ -164,6 +149,8 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
 
     create_iqr_hist(all_data, properties_to_plot, save_plots, saving_dir)
 
+    create_aa_propensity_boxplot(all_data, save_plots, saving_dir)
+
     return
 
 
@@ -171,7 +158,7 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
 if __name__ == '__main__':
     old = False
     if old:
-        os.chdir('/Users/in-divye.singh/Documents/Projects/PeptideGAN/antiviral-peptide-predictions-using-gan/src')
+        os.chdir('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src')
 
         save_plots = False
 
@@ -184,16 +171,7 @@ if __name__ == '__main__':
         generated_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/generated/generated_from_avp_pred_120epoch.csv'))
         generated_avp_seq_properties['activity'] = 'generated-AVP'
 
-        all_data_temp = avp_seq_properties.append(non_avp_seq_properties, ignore_index=True)
-        all_data = all_data_temp.append(generated_avp_seq_properties, ignore_index=True)
-        del all_data_temp
-        all_data.to_csv('../data/processed/sequence_properties_data.csv')
 
-        properties_to_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'with_reduced_cysteines', 'with_disulfid_bridges', 'gravy', 'net_charge_at_pH7point4']
-        create_distributions(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
-        properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
-        create_box_plots(all_data, properties_for_box_plot, save_plots)
-        create_iqr_hist(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, properties_to_plot, save_plots)
         create_aa_propensity_boxplot(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, save_plots)
     else:
         """
