@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import numpy as np
-from collections import Counter
 import os
 from datetime import datetime
 
 
 def create_sequence_properties_dataframe(sequences):
+    print("---- Creating properties for the all data. This may take a few mins depending on data size ----")
     params = ['sequence', 'aa_counts', 'aa_percentages', 'molecular_weight', 'aromaticity', 'instability_index',
               'isoelectric_point', 'sec_struc', 'helix', 'turn', 'sheet', 'epsilon_prot', 'with_reduced_cysteines',
               'with_disulfid_bridges', 'gravy', 'flexibility','net_charge_at_pH7point4']
@@ -69,52 +69,30 @@ def create_box_plots(data, properties, save=False, saving_dir = "../reports/figu
         plt.show()
 
 
-def create_iqr_hist2(positive_data, negative_data, generated_data, properties, save=False, saving_dir="../reports/figures/iqr_hist_"):
-    kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=100)
-    for property in properties:
-        print(property)
-        plt.figure(figsize=(10, 7), dpi=80)
-        sns.distplot(positive_data[property], hist=True, color="g", label="Real_AMP", **kwargs)
-        sns.distplot(negative_data[property], hist=True, color="y", label="non-AMP", **kwargs)
-        sns.distplot(generated_data[property], hist=True, color="m", label="generated-AMP", **kwargs)
-
-        Q1_amp = np.percentile(positive_data[property], 25, interpolation='midpoint')
-        Q3_amp = np.percentile(positive_data[property], 75, interpolation='midpoint')
-        Q1_non_amp = np.percentile(negative_data[property], 25, interpolation='midpoint')
-        Q3_non_amp = np.percentile(negative_data[property], 75, interpolation='midpoint')
-        Q1_generated_amp = np.percentile(generated_data[property], 25, interpolation='midpoint')
-        Q3_generated_amp = np.percentile(generated_data[property], 75, interpolation='midpoint')
-
-        plt.xlim([min(Q1_amp,Q1_non_amp,Q1_generated_amp), max(Q3_amp, Q3_non_amp,Q3_generated_amp)])
-        plt.legend()
-        plt.title(property)
-        if save:
-            plt.savefig(saving_dir + '/' + property + ".png")
-        plt.show()
-
 def create_iqr_hist(data, properties, save=False, saving_dir="../reports/figures/iqr_hist_"):
-    kwargs = dict(hist_kws={'alpha': .3}, kde_kws={'linewidth': 4}, bins=100)
+    print("---- Plotting IQR histogram ----")
+    kwargs = dict(hist_kws={'alpha': .7}, kde_kws={'linewidth': 4}, bins=100)
     for property in properties:
         print(property)
         plt.figure(figsize=(10, 7), dpi=80)
         sns.displot(data, x=property, hue="activity")
 
-    Q1 = 999
-    Q3 = -999
-    for activity in data.activity:
-        subset = data[data["activity"] == activity]
-        Q1_subset = np.percentile(subset[property], 25, interpolation='midpoint')
-        Q3_subset = np.percentile(subset[property], 75, interpolation='midpoint')
-        if Q1_subset < Q1:
-            Q1 = Q1_subset
-        if Q3_subset > Q3:
-            Q3 = Q3_subset
+        Q1 = 999
+        Q3 = -999
+        for activity in data.activity:
+            subset = data[data["activity"] == activity]
+            Q1_subset = np.percentile(subset[property], 25, interpolation='midpoint')
+            Q3_subset = np.percentile(subset[property], 75, interpolation='midpoint')
+            if Q1_subset < Q1:
+                Q1 = Q1_subset
+            if Q3_subset > Q3:
+                Q3 = Q3_subset
 
         plt.xlim([Q1, Q3])
         plt.legend()
         plt.title(property)
         if save:
-            plt.savefig(saving_dir + '/' + property + ".png")
+            plt.savefig(saving_dir + '/iqr_hist_' + property + ".png")
         plt.show()
 
 def create_aa_propensity_boxplot(avp_data_path, non_avp_data_path, generated_avp_data_path, save=False):
@@ -183,6 +161,8 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
     create_box_plots(all_data, properties_for_box_plot, save_plots, saving_dir)
 
     create_distributions(all_data, properties_to_plot, save_plots, saving_dir)
+
+    create_iqr_hist(all_data, properties_to_plot, save_plots, saving_dir)
 
     return
 
