@@ -112,7 +112,6 @@ def create_aa_propensity_boxplot(data, save=False, saving_dir="../reports/figure
         plt.show()
 
 
-
 def create_properties_and_plots(csv_file_with_location_and_activity='src/features/metadata.csv', directory_to_save_properties_file_and_plots='reports/'):
     """
     By default paths are from the root folder: antiviral_peptide_prediction
@@ -157,30 +156,12 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
 
 
 if __name__ == '__main__':
-    old = False
-    if old:
-        os.chdir('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src')
 
-        save_plots = False
-
-        avp_sequences = pd.read_csv('../data/raw/AVP_data.csv')
-        avp_seq_properties = create_sequence_properties_dataframe(avp_sequences)
-        avp_seq_properties['activity'] = 'AVP'
-        non_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/raw/non_AVP_data.csv'))
-        non_avp_seq_properties['activity'] = 'non-AVP'
-
-        generated_avp_seq_properties = create_sequence_properties_dataframe(pd.read_csv('../data/generated/generated_from_avp_pred_120epoch.csv'))
-        generated_avp_seq_properties['activity'] = 'generated-AVP'
-
-
-        create_aa_propensity_boxplot(avp_seq_properties, non_avp_seq_properties, generated_avp_seq_properties, save_plots)
-    else:
-        """
-        
-        !! Can give absolute paths as follows: !!
-        
-        create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
-        """
-        # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
-        # You can change your current working directory by: os.chdir('<your directory here>')
-        create_properties_and_plots('metadata.csv', '../../reports/')
+    """  
+    !! Can give absolute paths as follows: !!
+    
+    create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
+    """
+    # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
+    # You can change your current working directory by: os.chdir('<your directory here>')
+    create_properties_and_plots('metadata.csv', '../../reports/')
