@@ -1,0 +1,4 @@
+path,activity
+/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv,avp
+/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/non_AVP_data.csv,non-avp
+/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/generated/generated_AVP_data.csv,generated-avp
