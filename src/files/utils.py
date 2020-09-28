@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 
 def get_positive_amp_data(path):
     return pd.read_csv(path, sep=",", header=0).reset_index().drop('index', axis=1)[['Sequence', 'Activity']]
@@ -29,3 +30,16 @@ def massage_camp_data(data):
         while '' in sequences.loc[i, 'Activity']:
             sequences.loc[i, 'Activity'].remove('')
     return sequences
+
+def generate_random_sequences(number_of_sequences=100, max_length=100):
+    valid_aa = 'ACDEFGHIKLMNPQRSTVWY'
+    r = pd.DataFrame(columns=['Sequence'])
+    for i in range(number_of_sequences):
+        seq_length = random.randrange(0,max_length)
+        seq_list = random.choices(valid_aa, k=seq_length)
+        seq = pd.DataFrame([''.join(seq_list)], columns = ['Sequence'])
+        r = r.append(seq, ignore_index=True)
+    return r
+
+a = generate_random_sequences()
+a.to_csv('data/generated/generated_random_seq.csv', index=False)

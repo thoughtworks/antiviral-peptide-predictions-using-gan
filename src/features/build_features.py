@@ -112,6 +112,25 @@ def create_aa_propensity_boxplot(data, save=False, saving_dir="../reports/figure
         plt.show()
 
 
+def create_density_plots(data, properties, save=False, saving_dir="../reports/figures/density_"):
+    """
+    Very good explanation of density plots: https://towardsdatascience.com/histograms-and-density-plots-in-python-f6bda88f5ac0
+
+    """
+    kwargs = dict(hist_kws={'alpha': .7}, kde_kws={'linewidth': 4}, bins=200)
+    print("---- Plotting distribution ----")
+    for property in properties:
+        print(property)
+        plt.figure(figsize=(10, 7), dpi=80)
+        sns.displot(data, x=property, hue="activity", kind = 'kde')
+        plt.legend()
+        plt.title(property)
+        if save:
+            plt.savefig(saving_dir + '/density_' + property + ".png")
+        plt.show()
+    pass
+
+
 def create_properties_and_plots(csv_file_with_location_and_activity='src/features/metadata.csv', directory_to_save_properties_file_and_plots='reports/'):
     """
     By default paths are from the root folder: antiviral_peptide_prediction
@@ -146,6 +165,7 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
     create_box_plots(all_data, properties_for_box_plot, save_plots, saving_dir)
 
     create_distributions(all_data, properties_to_plot, save_plots, saving_dir)
+    create_density_plots(all_data, properties_for_box_plot, save_plots, saving_dir)
 
     create_iqr_hist(all_data, properties_to_plot, save_plots, saving_dir)
 
@@ -164,4 +184,8 @@ if __name__ == '__main__':
     """
     # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
     # You can change your current working directory by: os.chdir('<your directory here>')
+    if False:
+        a = generate_random_sequences()
+        a.to_csv('data/generated/generated_random_seq.csv', index=False)
+    
     create_properties_and_plots('metadata.csv', '../../reports/')
