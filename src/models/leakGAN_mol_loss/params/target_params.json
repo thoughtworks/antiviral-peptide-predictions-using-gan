@@ -1,0 +1,8 @@
+{
+    "vocab_size":20,
+    "batch_size":10,
+    "embed_dim":32,
+    "hidden_dim":32,
+    "seq_len":20,
+    "start_token":0
+}
