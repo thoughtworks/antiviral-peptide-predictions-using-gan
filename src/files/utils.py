@@ -1,6 +1,9 @@
 import pandas as pd
 import random
 
+
+VALID_AA = 'ACDEFGHIKLMNPQRSTVWY'
+
 def get_positive_amp_data(path):
     return pd.read_csv(path, sep=",", header=0).reset_index().drop('index', axis=1)[['Sequence', 'Activity']]
 
@@ -40,6 +43,3 @@ def generate_random_sequences(number_of_sequences=100, max_length=100):
         seq = pd.DataFrame([''.join(seq_list)], columns = ['Sequence'])
         r = r.append(seq, ignore_index=True)
     return r
-
-a = generate_random_sequences()
-a.to_csv('data/generated/generated_random_seq.csv', index=False)
