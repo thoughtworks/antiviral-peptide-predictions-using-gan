@@ -1,6 +1,6 @@
 {
-	"positive_filepath":"./data/corpus_AMP.npy",
-	"negative_filepath":"./data/corpus_nonAMP.npy",
+	"positive_filepath":"./data/corpus_AVP.npy",
+	"negative_filepath":"./data/corpus_nonAVP.npy",
     "batch_size":10,
     "shuffle":true,
     "num_workers":4,

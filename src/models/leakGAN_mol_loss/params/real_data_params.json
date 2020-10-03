@@ -1,5 +1,5 @@
 {
-    "filepath":"./data/corpus_AMP.npy",
+    "filepath":"./data/corpus_AVP.npy",
     "batch_size":10,
     "shuffle":true,
     "num_workers":4,

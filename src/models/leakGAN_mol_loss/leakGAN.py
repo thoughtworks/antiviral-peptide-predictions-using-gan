@@ -220,8 +220,7 @@ def pretrain_generator(model_dict, optimizer_dict, scheduler_dict, dataloader, v
             w_optimizer.step()
             w_optimizer.zero_grad()
             if i == 9:  ##why 63  guessing the batch size was 64 so changin it to 9
-                print("Pre-Manager Loss: {:.5f}, Pre-Worker Loss: {:.5f},samples: {:.5f}\n".format(m_loss, w_loss,
-                                                                                                   sample))
+                print("Pre-Manager Loss: {:.5f}, Pre-Worker Loss: {:.5f}\n".format(m_loss, w_loss,))
             m_lr_scheduler.step()
             w_lr_scheduler.step()
     """
