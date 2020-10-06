@@ -189,3 +189,23 @@ if __name__ == '__main__':
         a.to_csv('data/generated/generated_random_seq.csv', index=False)
     
     create_properties_and_plots('metadata.csv', '../../reports/')
+
+
+def get_peptide_composition(data_path, kmer):
+    sequences = pd.read_csv(data_path)
+    # seq_properties = pd.DataFrame(columns=params)
+    for seq in sequences.Sequence:
+        grams = []
+        for i in range(kmer):
+            grams.append(zip(*[iter(seq[i:])] * kmer))
+        str_ngrams = []
+        for ngrams in grams:
+            for ngram in ngrams:
+                str_ngrams.append("".join(ngram))
+        npeptide = pd.Series(str_ngrams).value_counts()
+        return npeptide.to_dict()
+
+        # row = pd.DataFrame([[seq, aa_counts, aa_percentages, ]], columns=params)
+        # seq_properties = seq_properties.append(row)
+
+a = get_peptide_composition('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',2)
