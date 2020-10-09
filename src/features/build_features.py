@@ -174,24 +174,7 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
     return
 
 
-
-if __name__ == '__main__':
-
-    """  
-    !! Can give absolute paths as follows: !!
-    
-    create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
-    """
-    # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
-    # You can change your current working directory by: os.chdir('<your directory here>')
-    if False:
-        a = generate_random_sequences()
-        a.to_csv('data/generated/generated_random_seq.csv', index=False)
-    
-    create_properties_and_plots('metadata.csv', '../../reports/')
-
-
-def get_peptide_composition(data_path, kmer):
+def get_peptide_composition_each_seq(data_path, kmer):
     sequences = pd.read_csv(data_path)
     # seq_properties = pd.DataFrame(columns=params)
     for seq in sequences.Sequence:
@@ -208,4 +191,53 @@ def get_peptide_composition(data_path, kmer):
         # row = pd.DataFrame([[seq, aa_counts, aa_percentages, ]], columns=params)
         # seq_properties = seq_properties.append(row)
 
-a = get_peptide_composition('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',2)
+def get_peptide_composition_full_file(data_path, kmer):
+    sequences = pd.read_csv(data_path)
+    str_ngrams = []
+    for seq in sequences.Sequence:
+        grams = []
+        for i in range(kmer):
+            grams.append(zip(*[iter(seq[i:])] * kmer))
+        for ngrams in grams:
+            for ngram in ngrams:
+                str_ngrams.append("".join(ngram))
+    npeptide = pd.Series(str_ngrams).value_counts()
+        # print(npeptide)
+    print(npeptide)
+    return npeptide
+
+
+if __name__ == '__main__':
+
+    """  
+    !! Can give absolute paths as follows: !!
+    
+    create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
+    """
+    # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
+    # You can change your current working directory by: os.chdir('<your directory here>')
+    if False:
+        a = generate_random_sequences()
+        a.to_csv('data/generated/generated_random_seq.csv', index=False)
+    
+    create_properties_and_plots('metadata.csv', '../../reports/')
+    calculate_peptide_composition = False
+    if calculate_peptide_composition:
+        get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',2)
+
+        npeptide = get_peptide_composition_full_file('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/filtered/AVPpred_Low_MIC_data_filtered_90perc.csv', 2).to_dict()
+
+        plt.bar(npeptide.keys(), npeptide.values(), color='g')
+        plt.ylabel("Count of AA in the file")
+        plt.title("Peptide")
+        plt.show()
+
+        a = npeptide.reset_index()
+        a.to_csv("reports/csv_files/dipeptide_composition_AVPpred_Low_MIC_data_filtered_90perc.csv")
+
+        plt.bar(a.iloc[:, 0], a.iloc[:, 1], color='g')
+        plt.ylabel("Count of AA in the file")
+        plt.title("Peptide")
+        plt.show()
+
+        pd.DataFrame.from_dict(npeptide)
