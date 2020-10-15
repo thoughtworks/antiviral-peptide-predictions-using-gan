@@ -225,15 +225,19 @@ if __name__ == '__main__':
     if calculate_peptide_composition:
         get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',2)
 
-        npeptide = get_peptide_composition_full_file('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/filtered/AVPpred_Low_MIC_data_filtered_90perc.csv', 2).to_dict()
+        npeptide = get_peptide_composition_full_file('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AMP_nonAVP_filtered_negative.csv', 2)
 
-        plt.bar(npeptide.keys(), npeptide.values(), color='g')
+        a = npeptide.reset_index()
+        a.to_csv("reports/csv_files/dipeptide_composition_AMP_nonAVP_filtered_negative.csv")
+
+        a.to_dict()
+
+        plt.bar(a.keys(), a.values(), color='g')
         plt.ylabel("Count of AA in the file")
         plt.title("Peptide")
         plt.show()
 
-        a = npeptide.reset_index()
-        a.to_csv("reports/csv_files/dipeptide_composition_AVPpred_Low_MIC_data_filtered_90perc.csv")
+
 
         plt.bar(a.iloc[:, 0], a.iloc[:, 1], color='g')
         plt.ylabel("Count of AA in the file")
