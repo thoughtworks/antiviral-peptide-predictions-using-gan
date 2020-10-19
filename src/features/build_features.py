@@ -221,14 +221,22 @@ if __name__ == '__main__':
         a.to_csv('data/generated/generated_random_seq.csv', index=False)
     
     create_properties_and_plots('metadata.csv', '../../reports/')
-    calculate_peptide_composition = False
-    if calculate_peptide_composition:
-        get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',2)
 
-        npeptide = get_peptide_composition_full_file('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AMP_nonAVP_filtered_negative.csv', 2)
+
+    ##### Change tyhis ####
+    calculate_peptide_composition = False
+    kmer = 4
+    file = "AMP_nonAVP_filtered_negative.csv"
+
+    # -----------
+
+    if calculate_peptide_composition:
+        get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',kmer)
+
+        npeptide = get_peptide_composition_full_file('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/'+file, kmer)
 
         a = npeptide.reset_index()
-        a.to_csv("reports/csv_files/dipeptide_composition_AMP_nonAVP_filtered_negative.csv")
+        a.to_csv("reports/csv_files/"+kmer+"peptide_composition_"+file)
 
         a.to_dict()
 
