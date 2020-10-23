@@ -1,4 +1,7 @@
 import tensorflow as tf
+if tf.__version__.split('.')[0] == '2':
+    import tensorflow.compat.v1 as tf
+    
 from tensorflow.python.ops import tensor_array_ops, control_flow_ops
 import numpy as np
 

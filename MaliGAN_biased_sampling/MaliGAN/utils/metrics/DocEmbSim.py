@@ -5,9 +5,12 @@ import random
 import nltk
 import numpy as np
 import tensorflow as tf
+if tf.__version__.split('.')[0] == '2':
+    import tensorflow.compat.v1 as tf
+    
 from scipy.spatial.distance import cosine
 
-from utils.metrics.Metrics import Metrics
+from .Metrics import Metrics
 
 
 class DocEmbSim(Metrics):

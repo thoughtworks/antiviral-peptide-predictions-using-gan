@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils.metrics.Metrics import Metrics
+from .Metrics import Metrics
 
 
 class Nll(Metrics):

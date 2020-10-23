@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.spatial.distance import cosine
 
-from utils.metrics.Metrics import Metrics
+from .Metrics import Metrics
 
 
 class EmbSim(Metrics):

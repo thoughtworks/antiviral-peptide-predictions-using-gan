@@ -1,12 +1,16 @@
 import json
 import random
+import os
 
 from nltk import CFG
 from nltk.parse.generate import generate
 
+cwd = os.getcwd()
+os.chdir("../../../")
+
 from MaliGAN.utils.text_process import *
 
-
+os.chdir(cwd)
 
 class OracleCfg:
     def __init__(self, cfg_grammar=None, origin_file='save/origin.txt', oracle_file='save/oracle.txt',

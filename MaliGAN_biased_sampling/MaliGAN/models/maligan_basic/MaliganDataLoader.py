@@ -77,13 +77,13 @@ class DisDataloader():
         # Generate labels
         positive_labels = [[0, 1] for _ in positive_examples]
         #print('positivelabels\n',positive_labels) #added a print statement
-        low_mic_labels = [[0, 1] for _ in positive_examples]
+        low_mic_labels = [[0, 1] for _ in low_mic_examples]
         negative_labels = [[1, 0] for _ in negative_examples]
         #print('negativelabels\n',negative_labels) #
 
-        self.positive_num_batch = int(len(self.positive_labels) / self.batch_size)
-        self.low_mic_num_batch = int(len(self.low_mic_labels) / self.batch_size)
-        self.negative_num_batch = int(len(self.negative_labels) / self.batch_size)
+        self.positive_num_batch = int(len(positive_labels) / self.batch_size)
+        self.low_mic_num_batch = int(len(low_mic_labels) / self.batch_size)
+        self.negative_num_batch = int(len(negative_labels) / self.batch_size)
 
         self.positive_examples = np.array(positive_examples)[:self.positive_num_batch * self.batch_size]
         self.low_mic_examples = np.array(low_mic_examples)[:self.low_mic_num_batch * self.batch_size]
@@ -93,7 +93,7 @@ class DisDataloader():
         self.low_mic_labels = np.array(low_mic_labels)[:self.low_mic_num_batch * self.batch_size]
         self.negative_labels = np.array(negative_labels)[:self.negative_num_batch * self.batch_size]
 
-        self.pointer = 0
+        #self.pointer = 0
 
     def next_batch(self):
         total_positive_examples_per_batch = int(np.round(self.batch_size/2))
@@ -121,7 +121,7 @@ class DisDataloader():
         batch_labels = batch_labels[shuffle_idx]
         
         ret = batch_examples, batch_labels
-        self.pointer = (self.pointer + 1) % self.num_batch
+        #self.pointer = (self.pointer + 1) % self.num_batch
         return ret
 
     def reset_pointer(self):

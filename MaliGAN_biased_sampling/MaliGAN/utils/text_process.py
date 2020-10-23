@@ -1,8 +1,8 @@
 # coding=utf-8
 import nltk
 
-def ampseq2word(filein):
-    fileout = 'temp2.txt'
+def ampseq2word(filein, fileout):
+    #fileout = 'temp2.txt'
     with open(filein, 'r') as infile:
         with open(fileout, 'w') as outfile:
             for line in infile:

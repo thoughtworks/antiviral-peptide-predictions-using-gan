@@ -1,5 +1,6 @@
 import tensorflow as tf
-
+if tf.__version__.split('.')[0] == '2':
+    import tensorflow.compat.v1 as tf
 
 def linear(input_, output_size, scope=None):
     '''

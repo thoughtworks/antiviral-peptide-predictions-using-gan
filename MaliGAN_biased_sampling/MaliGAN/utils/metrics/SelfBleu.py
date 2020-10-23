@@ -4,7 +4,7 @@ from multiprocessing import Pool
 import nltk
 from nltk.translate.bleu_score import SmoothingFunction
 
-from utils.metrics.Metrics import Metrics
+from .Metrics import Metrics
 
 
 class SelfBleu(Metrics):

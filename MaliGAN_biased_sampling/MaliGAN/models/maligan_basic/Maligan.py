@@ -1,4 +1,11 @@
 from time import time
+import os
+import tensorflow as tf
+if tf.__version__.split('.')[0] == '2':
+    import tensorflow.compat.v1 as tf
+    
+cwd = os.getcwd()
+os.chdir("../../../")
 
 from MaliGAN.models.Gan import Gan
 from MaliGAN.models.maligan_basic.MailganDiscriminator import Discriminator
@@ -11,6 +18,7 @@ from MaliGAN.utils.metrics.Nll import Nll
 from MaliGAN.utils.oracle.OracleLstm import OracleLstm
 from MaliGAN.utils.utils import *
 
+os.chdir(cwd)
 
 class Maligan(Gan):
     def __init__(self, oracle=None):
@@ -69,7 +77,7 @@ class Maligan(Gan):
         self.add_metric(docsim)
 
     def train_discriminator(self):
-        generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file)
+        generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file, replace_gen_file=True)
         self.dis_data_loader.load_train_data(self.oracle_file, self.low_mic_file, self.generator_file, pos_low_mic_frac=0.8)
         # pos_low_mic_frac=0.8 mean out of 10 positive example 8 will be from low mic and 2 from avp_low_mic
         for _ in range(3):
@@ -81,8 +89,11 @@ class Maligan(Gan):
             }
             _ = self.sess.run(self.discriminator.train_op, feed)
 
-    def evaluate(self):
-        generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file)
+    def evaluate(self, epoch=None):
+        if epoch is not None:
+            generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file, epoch=epoch)
+        else:
+            generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file, replace_gen_file=True)
         if self.oracle_data_loader is not None:
             self.oracle_data_loader.create_batches(self.generator_file)
         if self.log is not None:
@@ -225,7 +236,7 @@ class Maligan(Gan):
         self.reset_epoch()
         for epoch in range(self.pre_epoch_num * 3):
             print('epoch:' + str(epoch))
-            self.train_discriminator()
+            self.train_discriminator(epoch)
 
         self.reset_epoch()
         print('adversarial training:')
@@ -266,10 +277,10 @@ class Maligan(Gan):
         if data_loc is None:
             # data_loc = 'data/AMP_Sequence.txt'
             data_loc = 'data/AVPpred_Low_MIC_data_filtered_90perc.txt'
-            low_mic_loc = 'data/Low_MIC.txt'
-        data_loc = ampseq2word(data_loc)
-        low_mic_loc = ampseq2word(low_mic_loc)
-
+            low_mic_loc = 'data/manual_lowMIC.txt'
+        data_loc = ampseq2word(data_loc, 'temp2.txt')
+        low_mic_loc = ampseq2word(low_mic_loc, 'temp3.txt')
+        
         self.sequence_length, self.vocab_size = text_precess(data_loc)
 
         generator = Generator(num_vocabulary=self.vocab_size, batch_size=self.batch_size, emb_dim=self.emb_dim,
@@ -314,13 +325,21 @@ class Maligan(Gan):
         wi_dict, iw_dict = self.init_real_trainng(data_loc)
         self.init_real_metric()
 
-        def get_real_test_file(dict=iw_dict):
-            with open(self.generator_file, 'r') as file:
-                codes = get_tokenlized(self.generator_file)
+        def get_real_test_file(dict=iw_dict, epoch=None):
+            gen_file = self.generator_file
+            gen_seq_file = 'save/generated_sequences.txt'
+            if epoch is not None:
+                gen_file = gen_file.split('.')
+                gen_file = gen_file[0]+'_'+str(epoch)+'.'+gen_file[1]
+
+                gen_seq_file = f'save/generated_sequences_{epoch}.txt'
+                
+            with open(gen_file, 'r') as file:
+                codes = get_tokenlized(gen_file)
             with open(self.test_file, 'w') as outfile:
                 outfile.write(code_to_text(codes=codes, dictionary=dict))
             with open(self.test_file, 'r') as infile:
-                with open('save/generated_sequences.txt', 'w') as outfile:
+                with open(gen_seq_file, 'w') as outfile:
                     for line in infile:
                         output = list()
                         for char in line:
@@ -328,16 +347,17 @@ class Maligan(Gan):
                                 output.append(char)
                         output = ''.join(output)
                         outfile.write(output.upper())
-
-        self.sess.run(tf.global_variables_initializer())
+                        
+        self.sess.run(tf.compat.v1.global_variables_initializer())
 
         # self.pre_epoch_num = 5
         # self.adversarial_epoch_num = 7
         self.log = open('experiment-log-maligan-real.csv', 'w')
-        generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file)
+        generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file, replace_gen_file=True)
         self.gen_data_loader.create_batches(self.oracle_file)
 
         print('start pre-train generator:')
+        print('Pretrain epochs:', self.pre_epoch_num)
         for epoch in range(self.pre_epoch_num):
             start = time()
             loss = pre_train_epoch(self.sess, self.generator, self.gen_data_loader)
@@ -345,7 +365,7 @@ class Maligan(Gan):
             print('epoch:' + str(self.epoch) + '\t time:' + str(end - start))
             self.add_epoch()
             if epoch % 5 == 0:
-                generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file)
+                generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file, replace_gen_file=True)
                 get_real_test_file()
                 self.evaluate()
 
@@ -373,9 +393,9 @@ class Maligan(Gan):
             self.add_epoch()
             print('epoch:' + str(self.epoch) + '\t time:' + str(end - start))
             if epoch % 5 == 0 or epoch == self.adversarial_epoch_num - 1:
-                generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file)
-                get_real_test_file()
-                self.evaluate()
+                generate_samples(self.sess, self.generator, self.batch_size, self.generate_num, self.generator_file, epoch=epoch)
+                get_real_test_file(epoch=epoch)
+                self.evaluate(epoch=epoch)
 
             for _ in range(15):
                 self.train_discriminator()

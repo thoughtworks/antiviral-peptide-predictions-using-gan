@@ -2,13 +2,16 @@ import numpy as np
 import tensorflow as tf
 
 
-def generate_samples(sess, trainable_model, batch_size, generated_num, output_file=None, get_code=True):
+def generate_samples(sess, trainable_model, batch_size, generated_num, output_file=None, get_code=True, epoch=0, replace_gen_file=False):
     # Generate Samples
     generated_samples = []
     for _ in range(int(generated_num / batch_size)):
         generated_samples.extend(trainable_model.generate(sess))
     codes = list()
     if output_file is not None:
+        if not replace_gen_file:
+            output_file = output_file.split('.')
+            output_file = output_file[0]+'_'+str(epoch)+'.'+output_file[1]
         with open(output_file, 'w') as fout:
             for poem in generated_samples:
                 buffer = ' '.join([str(x) for x in poem]) + '\n'

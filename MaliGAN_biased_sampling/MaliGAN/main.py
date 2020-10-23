@@ -1,11 +1,19 @@
 import getopt
 import sys
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+#sys.path.append("../MaliGAN")
 
 from colorama import Fore
 
+cwd = os.getcwd()
+os.chdir("../")
 
 from MaliGAN.models.maligan_basic.Maligan import Maligan
 
+os.chdir(cwd)
 
 def set_gan(gan_name):
     gans = dict()

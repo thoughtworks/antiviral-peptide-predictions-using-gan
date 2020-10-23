@@ -1,6 +1,6 @@
 import nltk
 
-from utils.metrics.Metrics import Metrics
+from .Metrics import Metrics
 
 
 class Cfg(Metrics):

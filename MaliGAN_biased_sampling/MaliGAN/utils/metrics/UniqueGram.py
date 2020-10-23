@@ -2,7 +2,7 @@ import os
 from multiprocessing import Pool
 
 import nltk
-from utils.metrics.Metrics import Metrics
+from .Metrics import Metrics
 from nltk import ngrams
 
 class UniqueGram(Metrics):
