@@ -192,6 +192,9 @@ def get_peptide_composition_each_seq(data_path, kmer):
         # seq_properties = seq_properties.append(row)
 
 def get_peptide_composition_full_file(seq_list, kmer):
+    """
+    This is occurance of peptide in the full file. Multiple occurances in same peptide are also counted
+    """
     str_ngrams = []
     for seq in seq_list:
         grams = []
@@ -202,6 +205,26 @@ def get_peptide_composition_full_file(seq_list, kmer):
                 str_ngrams.append("".join(ngram))
     npeptide = pd.Series(str_ngrams).value_counts()
         # print(npeptide)
+    print(npeptide)
+    return npeptide
+
+def get_peptide_composition_in_number_of_sequences(seq_list, kmer):
+    """
+       This will return the number of sequences the peptide has occured in.
+    """
+    unique_kmers_in_peptide = []
+    for seq in seq_list:
+
+        temp=[]
+        grams = []
+        for i in range(kmer):
+            grams.append(zip(*[iter(seq[i:])] * kmer)) # all kmers in the sequence has been made
+        for ngrams in grams:
+            for ngram in ngrams:
+                temp.append("".join(ngram)) #flattening it out
+        unique_kmers_in_peptide.append(list(set(temp)))
+    flattened = [val for sublist in unique_kmers_in_peptide for val in sublist]
+    npeptide = pd.Series(flattened).value_counts()
     print(npeptide)
     return npeptide
 
@@ -225,31 +248,35 @@ if __name__ == '__main__':
 
 
     ##### Change this ####
-    calculate_peptide_composition = True
-    kmer = 2
-    column = 'Sequence'  # amino_acid_residues; kd_hydrophobicitya
+    calculate_peptide_composition = False
+    calculate_peptide_composition_in_number_of_sequences = True
+    kmer = 5
+    # column = 'Sequence'  # amino_acid_residues; kd_hydrophobicitya
     # column = 'amino_acid_residues'
-    # column = 'kd_hydrophobicitya'
+    column = 'kd_hydrophobicitya'
 
-    file = "AMP_nonAVP_filtered_negative_reduction_combined.csv"
+    # file = "AMP_nonAVP_filtered_negative_reduction_combined.csv"
     # file = "AVPpred_Low_MIC_data_filtered_90perc_reduction_combined.csv"
-    # file = "RA_data_negative_data_cdhit_filter_reduction_combined.csv"
+    file = "RA_data_negative_data_cdhit_filter_reduction_combined.csv"
 
     input_file = f"new_seq/{file}"
-    output_file = str(kmer)+"_" + column +"_"+ file
-
     # -----------
+
     sequences = pd.read_csv('../../data/raw/' + input_file)
-    list_of_seq = sequences[column] # amino_acid_residues; kd_hydrophobicitya
-    # list_of_seq = sequences.kd_hydrophobicitya
-    # list_of_seq = sequences.amino_acid_residues
+    list_of_seq = sequences[column]
 
     if calculate_peptide_composition:
         # get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',kmer)
 
-
+        output_file = str(kmer) + "_" + column + "_" + file
         npeptide = get_peptide_composition_full_file(list_of_seq, kmer)
 
+        a = npeptide.reset_index()
+        a.to_csv("../../reports/csv_files/%s" % output_file)
+
+    if calculate_peptide_composition_in_number_of_sequences:
+        output_file = str(kmer) + "_" + column + "_" + "num_seq" + "_" + file
+        npeptide = get_peptide_composition_in_number_of_sequences(list_of_seq, kmer)
         a = npeptide.reset_index()
         a.to_csv("../../reports/csv_files/%s" % output_file)
 

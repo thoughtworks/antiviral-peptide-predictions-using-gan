@@ -14,8 +14,8 @@ class Gan:
         self.sess = init_sess()
         self.metrics = list()
         self.epoch = 0
-        self.pre_epoch_num = 100 #Changed parameter
-        self.adversarial_epoch_num = 1000 #changed parameter
+        self.pre_epoch_num = 1500 #Changed parameter
+        self.adversarial_epoch_num = 2000 #changed parameter
         self.log = None
         self.reward = None
 
