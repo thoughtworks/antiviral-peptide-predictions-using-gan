@@ -25,6 +25,8 @@ non_avp = pd.read_csv("data/raw/AMP_nonAVP_filtered_negative.csv")
 avp_seq_properties = create_sequence_properties_dataframe(avp)
 non_avp_seq_properties = create_sequence_properties_dataframe(non_avp)
 
+# Upload composition based properties
+
 avp_seq_properties['Activity'] = 1
 non_avp_seq_properties['Activity'] = 0
 
@@ -55,3 +57,67 @@ evaluate_classifier(Y_test, predictions)
 fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10,2), dpi=3000)
 tree.plot_tree(clf, feature_names=params, class_names=['0','1'],filled=True)
 fig.savefig('DT_depth50_withAA.png')
+
+# ---- plot DT ----
+# import graphviz
+# # DOT data
+# dot_data = tree.export_graphviz(clf, out_file=None,
+#                                 feature_names=params,
+#                                 class_names=['0','1'],
+#                                 filled=True)
+#
+# # Draw graph
+# graph = graphviz.Source(dot_data, format="png")
+# graph
+#
+# graph.render("decision_tree_graphivz")
+#
+# from dtreeviz.trees import dtreeviz
+
+
+
+print("----- Logistic Regression ------")
+from sklearn.linear_model import LogisticRegression
+lr_classifier = LogisticRegression()
+lr_classifier.fit(X_train, Y_train)
+predictions = lr_classifier.predict(X_test)
+evaluate_classifier(Y_test, predictions)
+
+print("----- RFC ------")
+from sklearn.ensemble import RandomForestClassifier
+rf_classifier = RandomForestClassifier(30)
+rf_classifier.fit(X_train, Y_train)
+predictions = rf_classifier.predict(X_test)
+evaluate_classifier(Y_test, predictions)
+
+# probability of the data point belonging to the class
+predictions = rf_classifier.predict_proba(X_test)
+
+print("----- DL ------")
+from sklearn.neural_network import MLPClassifier
+mlp_clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(60, 20), random_state=1)
+mlp_clf.fit(X_train, Y_train)
+predictions = mlp_clf.predict(X_test)
+evaluate_classifier(Y_test, predictions)
+
+print("----- SVM ------")
+from sklearn.svm import SVC
+svc_classifier = SVC(kernel='poly')
+svc_classifier.fit(X_train, Y_train)
+predictions = svc_classifier.predict(X_test)
+evaluate_classifier(Y_test, predictions)
+
+print("----- KNN ------")
+from sklearn.neighbors import KNeighborsClassifier
+knn_classifier = KNeighborsClassifier(n_neighbors=5)
+knn_classifier.fit(X_train, Y_train)
+predictions = knn_classifier.predict(X_test)
+evaluate_classifier(Y_test, predictions)
+
+print("---- Gaussian Naive Bayes ----")
+from sklearn.naive_bayes import GaussianNB
+gnb_classifier = GaussianNB()
+gnb_classifier.fit(X_train, Y_train)
+predictions = gnb_classifier.predict(X_test)
+evaluate_classifier(Y_test, predictions)
+

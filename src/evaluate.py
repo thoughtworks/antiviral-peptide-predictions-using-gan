@@ -18,6 +18,9 @@ def evaluate_classifier(actual, predicted):
     print(confusion_matrix(actual, predicted))
     # metrics.accuracy_score(Y_test,predictions)
 
+    print("---- Accuracy score ----")
+    print(metrics.accuracy_score(actual, predicted))
+
     print("---- Balanced accuracy score ----")
     print(metrics.balanced_accuracy_score(actual, predicted))
 
