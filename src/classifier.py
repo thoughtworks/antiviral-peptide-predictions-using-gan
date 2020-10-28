@@ -15,25 +15,27 @@ os.chdir('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-
 """
 Datasets:
 highly active - manually curated : data/raw/manual_lowMIC.csv
-avp - low_mic_90perc : AVPpred_Low_MIC_data_filtered_90perc.csv
-nonAVP_AMP - 90perc : raw/AMP_nonAVP_filtered_negative.csv
+avp - low_mic_90perc : data/filtered/AVPpred_Low_MIC_data_filtered_90perc.csv
+nonAVP_AMP - 90perc : data/raw/AMP_nonAVP_filtered_negative.csv
 """
 
-avp = pd.read_csv("data/raw/manual_lowMIC.csv")
+highly_active_avp = pd.read_csv("data/raw/manual_lowMIC.csv")
+medium_avp = pd.read_csv("data/filtered/AVPpred_Low_MIC_data_filtered_90perc.csv")
 non_avp = pd.read_csv("data/raw/AMP_nonAVP_filtered_negative.csv")
 
-avp_seq_properties = create_sequence_properties_dataframe(avp)
+highly_activeavp_seq_properties = create_sequence_properties_dataframe(highly_active_avp)
 non_avp_seq_properties = create_sequence_properties_dataframe(non_avp)
 
 # Upload composition based properties
 
-avp_seq_properties['Activity'] = 1
+
+highly_activeavp_seq_properties['Activity'] = 1
 non_avp_seq_properties['Activity'] = 0
 
-avp_seq_properties = pd.concat([avp_seq_properties.drop(['aa_percentages'], axis=1), avp_seq_properties['aa_percentages'].apply(pd.Series)], axis=1)
+highly_activeavp_seq_properties = pd.concat([highly_activeavp_seq_properties.drop(['aa_percentages'], axis=1), highly_activeavp_seq_properties['aa_percentages'].apply(pd.Series)], axis=1)
 non_avp_seq_properties = pd.concat([non_avp_seq_properties.drop(['aa_percentages'], axis=1), non_avp_seq_properties['aa_percentages'].apply(pd.Series)], axis=1)
 
-data = avp_seq_properties
+data = highly_activeavp_seq_properties
 data = data.append(non_avp_seq_properties)
 params = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4','A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']
 # Creating a DT classifier
