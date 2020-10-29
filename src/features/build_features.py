@@ -230,68 +230,77 @@ def get_peptide_composition_in_number_of_sequences(seq_list, kmer):
 
 
 if __name__ == '__main__':
-
-    """  
-    !! Can give absolute paths as follows: !!
-    
-    create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
-    """
-    # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
-    # You can change your current working directory by: os.chdir('<your directory here>')
-
-    # TO generate random sequences:
-    if False:
-        a = generate_random_sequences()
-        a.to_csv('data/generated/generated_random_seq.csv', index=False)
-    
-    # create_properties_and_plots('metadata.csv', '../../reports/')
+    create_properties_and_plots(
+        '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv',
+        '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
 
 
-    ##### Change this ####
-    calculate_peptide_composition = False
-    calculate_peptide_composition_in_number_of_sequences = True
-    kmer = 5
-    # column = 'Sequence'  # amino_acid_residues; kd_hydrophobicitya
-    # column = 'amino_acid_residues'
-    column = 'kd_hydrophobicitya'
+# if __name__ == '__main__':
+#
+#     """
+#     !! Can give absolute paths as follows: !!
+#
+#     create_properties_and_plots('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv', '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
+#     """
+#     # Function by default assumes you are int he root directory: antiviral-peptide-predictions-using-gan.
+#     # You can change your current working directory by: os.chdir('<your directory here>')
+#
+#     # TO generate random sequences:
+#     if False:
+#         a = generate_random_sequences()
+#         a.to_csv('data/generated/generated_random_seq.csv', index=False)
+#
+#     # create_properties_and_plots('metadata.csv', '../../reports/')
+#
+#
+#     ##### Change this ####
+#     calculate_peptide_composition = False
+#     calculate_peptide_composition_in_number_of_sequences = True
+#     kmer = 5
+#     # column = 'Sequence'  # amino_acid_residues; kd_hydrophobicitya
+#     # column = 'amino_acid_residues'
+#     column = 'kd_hydrophobicitya'
+#
+#     # file = "AMP_nonAVP_filtered_negative_reduction_combined.csv"
+#     # file = "AVPpred_Low_MIC_data_filtered_90perc_reduction_combined.csv"
+#     file = "RA_data_negative_data_cdhit_filter_reduction_combined.csv"
+#
+#     input_file = f"new_seq/{file}"
+#     # -----------
+#
+#     sequences = pd.read_csv('../../data/raw/' + input_file)
+#     list_of_seq = sequences[column]
+#
+#     if calculate_peptide_composition:
+#         # get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',kmer)
+#
+#         output_file = str(kmer) + "_" + column + "_" + file
+#         npeptide = get_peptide_composition_full_file(list_of_seq, kmer)
+#
+#         a = npeptide.reset_index()
+#         a.to_csv("../../reports/csv_files/%s" % output_file)
+#
+#     if calculate_peptide_composition_in_number_of_sequences:
+#         output_file = str(kmer) + "_" + column + "_" + "num_seq" + "_" + file
+#         npeptide = get_peptide_composition_in_number_of_sequences(list_of_seq, kmer)
+#         a = npeptide.reset_index()
+#         a.to_csv("../../reports/csv_files/%s" % output_file)
+#
+#         # b = a.to_dict()
+#         #
+#         # plt.bar(b.keys(), b.values(), color='g')
+#         # plt.ylabel("Count of AA in the file")
+#         # plt.title("Peptide")
+#         # plt.show()
+#         #
+#         #
+#         #
+#         # plt.bar(a.iloc[:, 0], a.iloc[:, 1], color='g')
+#         # plt.ylabel("Count of AA in the file")
+#         # plt.title("Peptide")
+#         # plt.show()
+#         #
+#         # pd.DataFrame.from_dict(npeptide)
 
-    # file = "AMP_nonAVP_filtered_negative_reduction_combined.csv"
-    # file = "AVPpred_Low_MIC_data_filtered_90perc_reduction_combined.csv"
-    file = "RA_data_negative_data_cdhit_filter_reduction_combined.csv"
 
-    input_file = f"new_seq/{file}"
-    # -----------
 
-    sequences = pd.read_csv('../../data/raw/' + input_file)
-    list_of_seq = sequences[column]
-
-    if calculate_peptide_composition:
-        # get_peptide_composition_each_seq('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv',kmer)
-
-        output_file = str(kmer) + "_" + column + "_" + file
-        npeptide = get_peptide_composition_full_file(list_of_seq, kmer)
-
-        a = npeptide.reset_index()
-        a.to_csv("../../reports/csv_files/%s" % output_file)
-
-    if calculate_peptide_composition_in_number_of_sequences:
-        output_file = str(kmer) + "_" + column + "_" + "num_seq" + "_" + file
-        npeptide = get_peptide_composition_in_number_of_sequences(list_of_seq, kmer)
-        a = npeptide.reset_index()
-        a.to_csv("../../reports/csv_files/%s" % output_file)
-
-        # b = a.to_dict()
-        #
-        # plt.bar(b.keys(), b.values(), color='g')
-        # plt.ylabel("Count of AA in the file")
-        # plt.title("Peptide")
-        # plt.show()
-        #
-        #
-        #
-        # plt.bar(a.iloc[:, 0], a.iloc[:, 1], color='g')
-        # plt.ylabel("Count of AA in the file")
-        # plt.title("Peptide")
-        # plt.show()
-        #
-        # pd.DataFrame.from_dict(npeptide)
