@@ -126,7 +126,7 @@ params = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_p
        '- charged (DE)', 'Tiny (ACDGST)', 'Small (EHILKMNPQV)',
        'Large (FRWY)','A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']
 """
-basic_params = params = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4','A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']
+basic_params = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4','A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y']
 
 params = basic_params + composition_params + dipeptide_params + shanon_entropy_params
 params = basic_params
@@ -155,14 +155,18 @@ evaluate_classifier(Y_test, predictions)
 
 fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10,2), dpi=3000)
 tree.plot_tree(clf, feature_names=params, class_names=['0','1'],filled=True)
-fig.savefig('DT_depth50_withAA.png')
+fig.savefig('DT_depth10_all_params.png')
 
 # Showing feature importance
 importance = clf.feature_importances_
 # summarize feature importance
+imp_features = pd.DataFrame(columns = ['feature', 'score'])
 for i,v in enumerate(importance):
-	print('Feature: %0d, Score: %.5f' % (i,v))
+	# print('Feature: %0d, Score: %.5f' % (i,v))
+	imp_features = imp_features.append(pd.DataFrame([[params[i],v]], columns = ['feature', 'score']))
 # plot feature importance
+
+imp_features.sort_values(by='score', ascending=False)
 plt.bar([x for x in range(len(importance))], importance)
 plt.show()
 
@@ -228,8 +232,49 @@ gnb_classifier = GaussianNB()
 gnb_classifier.fit(X_train, Y_train)
 predictions = gnb_classifier.predict(X_test)
 evaluate_classifier(Y_test, predictions)
+#
+# # xgboost for feature importance on a classification problem
+# from sklearn.datasets import make_classification
+# from xgboost import XGBClassifier
+# from matplotlib import pyplot
+# # define dataset
+# # X, y = make_classification(n_samples=1000, n_features=10, n_informative=5, n_redundant=5, random_state=1)
+# # define the model
+# model = XGBClassifier()
+# # fit the model
+# model.fit(X_train, Y_train)
+# predictions = gnb_classifier.predict(X_test)
+# evaluate_classifier(Y_test, predictions)
+# # get importance
+# importance = model.feature_importances_
+# # summarize feature importance
+# imp_features = pd.DataFrame(columns = ['feature', 'score'])
+# for i,v in enumerate(importance):
+# 	# print('Feature: %0d, Score: %.5f' % (i,v))
+# 	imp_features = imp_features.append(pd.DataFrame([[params[i],v]], columns = ['feature', 'score']))
+#
+# # plot feature importance
+# pyplot.bar([x for x in range(len(importance))], importance)
+# pyplot.show()
 
 # Classify the generated sequences:
-generated_properties = ""
-predictions = gnb_classifier.predict(generated_properties)
+generated_sequences = pd.read_csv("data/sequence_properties/submission_sequences_3010/generated_sequences.csv")
+
+generated_sequences_properties = create_sequence_properties_dataframe(generated_sequences)
+generated_sequences_properties = pd.concat([generated_sequences_properties.drop(['aa_percentages'], axis=1), generated_sequences_properties['aa_percentages'].apply(pd.Series)], axis=1)
+to_drop=['Sequences']
+generated_sequences_comp = pd.read_csv("data/sequence_properties/submission_sequences_3010/composition_based.csv").drop(to_drop, axis=1)
+to_drop=['ID']
+generated_sequences_dipeptide = pd.read_csv("data/sequence_properties/submission_sequences_3010/final_dipeptide_result.csv").drop(to_drop, axis=1)
+to_drop = ['ID', 'Sequence']
+generated_sequences_se = pd.read_csv("data/sequence_properties/submission_sequences_3010/final_SE_residue_result.csv").drop(['Sequence'], axis=1)
+generated_sequences_all_props_combined = [generated_sequences_properties.set_index(generated_sequences_comp.index), generated_sequences_comp, generated_sequences_dipeptide, generated_sequences_se]
+generated_sequences_all_prop = pd.concat(generated_sequences_all_props_combined, axis=1)
+
+to_predict = generated_sequences_all_prop[params]
+
+generated_predictions = gnb_classifier.predict(to_predict)
+generated_predictions = clf.predict(to_predict)
+generated_predictions = mlp_clf.predict(to_predict)
+generated_predictions = rf_classifier.predict(to_predict)
 

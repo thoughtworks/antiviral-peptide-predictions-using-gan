@@ -11,7 +11,7 @@ def create_sequence_properties_dataframe(sequences):
     print("---- Creating properties for the all data. This may take a few mins depending on data size ----")
     params = ['sequence', 'aa_counts', 'aa_percentages', 'molecular_weight', 'aromaticity', 'instability_index',
               'isoelectric_point', 'sec_struc', 'helix', 'turn', 'sheet', 'epsilon_prot', 'with_reduced_cysteines',
-              'with_disulfid_bridges', 'gravy', 'flexibility','net_charge_at_pH7point4']
+              'with_disulfid_bridges', 'gravy', 'flexibility','net_charge_at_pH7point4', 'length']
 
     seq_properties = pd.DataFrame(columns=params)
 
@@ -34,10 +34,11 @@ def create_sequence_properties_dataframe(sequences):
         flexibility = X.flexibility()
         # X.protein_scale()
         net_charge_at_pH7point4 = X.charge_at_pH(7.4)
+        length = X.length
 
         row = pd.DataFrame([[seq, aa_counts, aa_percentages, molecular_weight, aromaticity, instability_index,
                              isoelectric_point, sec_struc, helix, turn, sheet, epsilon_prot, with_reduced_cysteines,
-                             with_disulfid_bridges, gravy, flexibility, net_charge_at_pH7point4]], columns=params)
+                             with_disulfid_bridges, gravy, flexibility, net_charge_at_pH7point4, length]], columns=params)
         seq_properties = seq_properties.append(row)
     return seq_properties
 
