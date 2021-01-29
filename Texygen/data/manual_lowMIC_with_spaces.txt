@@ -1,0 +1,131 @@
+Sequence
+A N V V A T Y P A H S
+S K H S S L D C V L R P
+M H R S L L G R M K G A
+W L V F F V I A Y F A R
+H V T T T F A P P P P R
+S V V P S K A T W G F A
+A C F P W G N T W C G G K
+A C F P W G N Q W C G G K
+I F K A I W S G I K S L F
+Y R W R G P T A A F L S L V
+R G I L I H N T I F G E Q V F
+S S S T S T Q V Q I L S N A L
+R R L Q V G G G T L K F F L T
+G W W Y K G R A R P V S A V A
+R A V W R H S V A T P S H S V
+A D G S L L G R M K G A A G
+P R P I S Y L K G S S G G P L
+G Q P E E G A P C Q V V L Q G A
+G S R V Q I R C R F R N S T R
+W L V F F V I F Y F F R R R K K
+R R K K W L V F F V I F Y F F R
+R G G S V V I V G R I I L S G R K
+F K L R A K I K V R L R A K I K L
+R T Q R R G R T G R G K P G I Y R
+S T Q R R G R T G R G R R G I Y R
+L F R L I K S L I K R L V S A F K
+L F G L I P S L I G G L V S A F K
+A A L E A K I C H Q I E Y Y F G D F
+S W R L I D W D W I C E V L S D F K
+K F D S L V E C I W D W I D R L W S
+K W L C R I W S W I S D V L D D F E
+S I W R D W V D L I C E F L S D W K
+S W L R D V W D W V C T I L T D F K
+D W L R I I W D W V C S V V S D F K
+S W L W E V W D W V L H V L S D F K
+T W L R A I W D W V C T A L T D F K
+S W L R D V W D W V C T V L S D F K
+S W L R D I W R W I C K V L S R F K
+F I L A F L G W I G A I V S T A L P
+A F L G W I G A I V S T A L P Q W R
+G W I G A I V S T A L P Q W R I Y S
+G A I V S T A L P Q W R I Y S Y A G
+A G D D Q G L D K C V P N S K E K
+I P E S S E L T L Q E L L G E E R R
+S W L R D L W D W I C E L L S D F K
+S W L R D I W D W L C E L L S D F K
+T L K P I F K L P L G I N I T N F R
+R G G R L C Y C R R R F C V C V G R
+P P A T H T I A D R N H T P F S D V
+G V F V F N G T S W F I T Q R N F F S
+G Y F V Q D D G E W K F T G S S Y Y Y
+R Q M R A W G Q D Y Q H G G M G Y S C
+T D V I L M C F S I D S P D S L E N I
+R R K K A A V A L L P A V L L A L L A P
+K V L T T G L P A L I S W I K R K R Q Q
+S G S W L R D I W D W I C E V L S D F K
+S W L R D I W D W I C E V L S D F K T W
+F W F T L I K T Q A K Q P A R Y R R F C
+Q Y G S F C T Q L N R A L S G I A A E Q
+A L D K L E E S N S K L D K V N V K L T
+F K V K A K V K A K V K A K V K A K K K K
+P L S P P L R N T H P Q A M Q W N S T T F
+Q L Q K W E D W V R W I G N I P Q Y L K G
+A R R A W R R A R R A A R R A R R A A R R
+F L D S K A E L E K A R K I L S E V G R W Y
+L P R R L H L E P A F L P Y S V K A H E C C
+G Y H L M S F P Q A A P H G V V F L H V T W
+F A K K F A K K F K K F A K K F A K F A F A F
+F L F A F R I F K R V F K K F R K L F K R A F
+F A L A L K A L K K A L K K L K K A L K K A L
+F A I A I K A I K K A I K K I K K A I K K A I
+Q L E S L T D R E L L L L I A R K T C G S V E
+L L D C W V R L G R Y L L R R L K T P F T R L
+M A N A G L Q L L G F I L A F L G W I G A I V S
+S I S N A L N K L E E S N R N L D K V N V K L T
+N I L R L K E S I T A T I E A V H E V T D G L S
+F R F K I K F R L K F R F K A R F K F R A K F R A
+S D H S E S I Q K K F Q L M K E H V N K I G V D S
+F A V G L R A I K R A L K K L R R G V R K V A K D L
+A L Q E L L G E Y I Q W L K D G G P S S G R P P P S
+C T E E H I V A T E L V I Q E M Y I K I N V K N S P
+F K C R R W Q W R M K K L G A P S I T C V R R A F A
+F L A A A R I A K R V A K K A R K L A K R A A R K R K
+K K K K F V K K V A K K V K K V A K K V A K V A V A V
+K R K R F A K K F L R F L R K V I R F L K R F I R R F
+H M N A S D M E I K S Y I N M I E S V E E S S N Y D F
+R W M V W R H W F H R L R L P Y N P G K N K Q N Q Q W P
+R I I L G Q C I K R E A E A A I E Q I F R T K Y N D S H
+C C F L R I Q N D S I I R L G D L Q P L S Q R V S T D W Q
+A W D F G S L G G V F T S I G K A L H Q V F G A I Y G A A
+A W D F G S V G G V L N S L G K M V H Q I F G S A Y T A L
+A W D F G S I G G V F T S V G K L V H Q V F G T A Y G V L
+A W D F G S V G G L F T S L G K A V H Q V F G S V Y T I M
+C R F P N I T N S H V P I L Q E R P P L E N R V L T G W G L
+C C F L N I T N S H V S I L Q E R P P L E N R V L T G W G L
+G A K K G A K K G K K G A K K G A K G A G A K G A G A F K K K K
+V V T T R L F M S L V A S V R N A F Q S G Y I S F D E I I K T E
+S M E K L A G F G A V G A G A T A E E T R R M L H R A F D T L A
+Y K F A C P E C P K R F M R S D H L S K H I T L H E L L G E E R R
+D L S N Q I N S I N K S L K S A E D W I A D S N F F A N Q A R T A K
+Y D H I Q D H V N T M F S R L A T S W C L L Q N K E R A L W A E A A
+N A D I I K S L I R K T I I N A S K N T A S L S I L Q H L Y V L R S
+H R I D L G P P I S L E R L D V G T N L G N A I A K L E D A K E L L E
+L G P P I S L E R L D V G T N L G N A I A K L E D A K E L L E S S D Q
+I S L E R L D V G T N L G N A I A K L E D A K E L L E S S D Q I L R S
+N S V A L D P I D I S I E L N K A K S D L E E S K E W I R R S N Q K L
+L D P I D I S I E L N K A K S D L E E S K E W I R R S N Q K L D S I G
+D I S I E L N K A K S D L E E S K E W I R R S N Q K L D S I G N W H Q
+E L N K A K S D L E E S K E W I R R S N Q K L D S I G N W H Q S S T T
+D A S I S Q V N E K I N Q S L A F I R K S D E L L H N V N A G K S T T
+K W K V F K K I E K M G R N I R N G I V K A G P A I A V L G E A K A L
+F A V A V K A V A V K A V A V K A V K K A V K K V K K A V K K A V K K K K
+K R K R A V K R V G R R L K K L A R K I A R L G V A K L A G L R A V K L F
+G I C R C I C G R G I C R C I C G R I G G R V P G V G V P G V G H H H H H H
+N G I G V T Q N V L Y E N Q K Q I A N Q F N K A I S Q I Q E S L T T T S T A
+N F Y D P L V F P S D E F D A S I S Q V N E K I N Q S L A S I R K S D E L L H N V N A G K
+Q K Q I A N Q F N K A I S Q I Q E S L T T T S T A L G K L Q D V V N Q N A Q A L N T L V K Q
+Q N Q S A N Q F Q K E I S Q I N E V L T T T N T S L G K L Q D D V N Q N N Q S L N T L Q K E
+G R R R R S V Q W C A V S Q P E A T K C F Q W Q R N M R K V R G P P V S C I K R D S P I Q C I Q A
+A V S K V L H L E G E V N K I S A L L S T N K A V V S L S N G V S V L T S K V L D L D N Y I D K Q L L P I V N K
+P K E E L D K Y F K N H T S P D V D L G D I S G I N A S V V N I Q K E I D R L N E V A K N L N E S L I D L Q E L G K Y E
+E E L R V R L A S H L R K L R K R L L R D A D D L Q K R L A V Y E E Q A Q Q I R L Q A E A F Q A R L K S W F E P L V E D M
+S L D Q I N V T F L D L E Y E M K K L E E A I K K L E E S Y I D L K E L
+N G A I C W G P C P T A F R Q I G N C G H F K V R C C K I R
+A T C Y C R T G R C A T R E S L S G V C E I S G R L Y R L C C R
+C F P Y I T R P G T Y H D W W Y T R K N R Q
+Y T S L I H S L I E E S Q N Q Q E K N E Q E L L E L D K W A S L W N W F
+I L P W K W P W W P W R R
+G T N L S V P N P L G F F P D H Q L D P A F G A N S N N P D W D F N P N K D H W P E A N K V G
+S W E T W E R E I E N Y T R Q I Y R I L E E S Q E Q Q D R N E R D L L E
