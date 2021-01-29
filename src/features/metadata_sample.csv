@@ -1,4 +1,4 @@
 path,activity
-/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/AVP_data.csv,avp
-/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/non_AVP_data.csv,non-avp
-/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/data/generated/generated_AVP_data.csv,generated-avp
+/Users/shraddha/Documents/projects/work/life_sciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/nonAMP.csv,Random peptides
+/Users/shraddha/Documents/projects/work/life_sciences/ddh/antiviral-peptide-predictions-using-gan/data/raw/manual_lowMIC.csv,HA-AVP
+/Users/shraddha/Documents/projects/work/life_sciences/ddh/antiviral-peptide-predictions-using-gan/data/generated/generated_sequences_leakgan_final.csv,PandoraGAN

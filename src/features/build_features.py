@@ -58,13 +58,13 @@ def create_distributions(data, properties, save=False, saving_dir="../reports/fi
         plt.show()
 
 
-def create_box_plots(data, properties, save=False, saving_dir = "../reports/figures/box_plot_"):
+def create_box_plots(data, properties, save=False, saving_dir = "../reports/figures/paper/box_plot_"):
     for property in properties:
         print(property)
         plt.figure(figsize=(10, 7), dpi=80)
         ax = sns.boxenplot(x="activity", y=property, hue="activity", data=data)
         plt.legend()
-        plt.title(property)
+        # plt.title(property)
         if save:
             plt.savefig(saving_dir + '/box_plot_' + property + ".png")
         plt.show()
@@ -146,7 +146,7 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
     properties_for_box_plot = ['molecular_weight', 'aromaticity', 'instability_index', 'isoelectric_point', 'helix', 'turn', 'sheet', 'gravy', 'net_charge_at_pH7point4']
 
     dt = datetime.now().__str__()
-    saving_dir = directory_to_save_properties_file_and_plots + dt
+    saving_dir = directory_to_save_properties_file_and_plots #+ dt
     os.mkdir(saving_dir)
 
     metadata = pd.read_csv(csv_file_with_location_and_activity)
@@ -161,7 +161,7 @@ def create_properties_and_plots(csv_file_with_location_and_activity='src/feature
         seq_properties['activity'] = activity
         all_data = all_data.append(seq_properties, ignore_index=True)
 
-    all_data.to_csv(saving_dir + '/properties.csv')
+    all_data.to_csv(saving_dir + '/properties_paperRun.csv')
 
     create_box_plots(all_data, properties_for_box_plot, save_plots, saving_dir)
 
@@ -232,8 +232,8 @@ def get_peptide_composition_in_number_of_sequences(seq_list, kmer):
 
 if __name__ == '__main__':
     create_properties_and_plots(
-        '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata.csv',
-        '/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan/reports/')
+        '/Users/shraddha/Documents/projects/work/life_sciences/ddh/antiviral-peptide-predictions-using-gan/src/features/metadata_sample.csv',
+        '/Users/shraddha/Documents/projects/work/life_sciences/ddh/antiviral-peptide-predictions-using-gan/reports/run_for_paper4/')
 
 
 # if __name__ == '__main__':
