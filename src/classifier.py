@@ -8,7 +8,7 @@ from src.evaluate import evaluate_classifier
 from src.features.build_features import create_sequence_properties_dataframe
 
 os.getcwd()
-os.chdir('/Users/shraddhasurana/Desktop/projects/E4R/LifeSciences/ddh/antiviral-peptide-predictions-using-gan')
+# Change to root directory
 
 """
 Datasets:
